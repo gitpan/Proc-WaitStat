@@ -1,4 +1,4 @@
-# $Id: WaitStat.pm,v 1.1 1997-05-20 22:14:23-04 roderick Exp $
+# $Id: WaitStat.pm,v 1.3 1999-10-21 12:39:43-04 roderick Exp $
 #
 # Copyright (c) 1997 Roderick Schertler.  All rights reserved.  This
 # program is free software; you can redistribute it and/or modify it
@@ -33,12 +33,11 @@ use strict;
 use vars	qw($VERSION @ISA @EXPORT_OK);
 
 use Carp	qw(croak);
+use Exporter	  ();
 use IPC::Signal	qw(sig_name);
 use POSIX	qw(:sys_wait_h);
 
-require Exporter;
-
-$VERSION	= 0.01;
+$VERSION	= '1.00';
 @ISA		= qw(Exporter);
 @EXPORT_OK	= qw(waitstat waitstat_reuse waitstat_die close_die);
 
@@ -128,6 +127,11 @@ and a scalar.
 sub close_die (*$) {
     my ($fh, $name) = @_;
 
+    unless (ref $fh || ref \$fh eq 'GLOB') {
+	require Symbol;
+	$fh = Symbol::qualify_to_ref($fh, caller);
+    }
+
     unless (close $fh) {
 	croak "Error closing $name: ",
 		$!+0 ? "$!" : 'non-zero exit (' . waitstat($?) . ')';
@@ -169,6 +173,6 @@ Roderick Schertler <F<roderick@argon.org>>
 
 =head1 SEE ALSO
 
-perl(1).
+perl(1), IPC::Signal(3pm).
 
 =cut

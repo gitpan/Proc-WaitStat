@@ -1,7 +1,7 @@
 #!perl -w
 use strict;
 
-# $Id: waitstat.t,v 1.1 1997-05-20 22:14:23-04 roderick Exp $
+# $Id: waitstat.t,v 1.3 1999-10-21 12:43:58-04 roderick Exp $
 #
 # Copyright (c) 1997 Roderick Schertler.  All rights reserved.  This
 # program is free software; you can redistribute it and/or modify it
@@ -56,10 +56,13 @@ ok 14, $@ eq '', $@;
 eval { waitstat_die 1, 'program' };
 ok 15, $@ =~ /^Non-zero/, $@;
 
+# This also tests some of the different forms a filehandle can take when
+# passed to close_die().
+use vars qw(*TRUE); # squelch warning
 ok 16, prototype('close_die') eq '*$';					#';
 ok 17, open(TRUE, '|true');
-eval { close_die \*TRUE, 'true' };
+eval { close_die TRUE, 'true' };
 ok 18, $@ eq '', $@;
 ok 19, open(FALSE, '|false');
-eval { close_die \*FALSE, 'false' };
+eval { close_die *FALSE, 'false' };
 ok 20, $@ =~ /^Error closing false:/, $@;
