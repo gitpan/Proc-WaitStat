@@ -1,0 +1,7 @@
+Revision history for Perl extension Proc::WaitStat.
+
+0.01  Thu May 15 00:00:00 EDT 1997
+
+    - Initial version.
+
+$Id: Changes,v 1.1 1997-05-20 22:14:23-04 roderick Exp $
